@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>autocar-location.com</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h1><span class="highlight">autocar</span>-location.com</h1>
+      <ul class="menu">
+        <li class="active">Accueil</li>
+        <li>Devis</li>
+        <li>Voyages</li>
+        <li>Messagerie</li>
+        <li>Documents</li>
+        <li>Paramètres personnels</li>
+      </ul>
+    </aside>
+    <main class="dashboard">
+      <div class="main-left">
+        <section class="kpi">
+          <div class="kpi-box"><span>2</span> Devis en cours</div>
+          <div class="kpi-box"><span>3</span> Voyages confirmés</div>
+        </section>
+
+        <section>
+          <h2>Devis</h2>
+          <table class="compact">
+            <tr><th>Date</th><th>Référence</th><th>Statut</th><th>Montant estimé</th></tr>
+            {% for d in data.devis %}
+            <tr><td>{{ d.date }}</td><td>{{ d.ref }}</td><td>{{ d.statut }}</td><td>{{ d.montant }}</td></tr>
+            {% endfor %}
+          </table>
+        </section>
+
+        <section>
+          <h2>Voyages</h2>
+          <table class="compact">
+            <tr><th>Date de départ</th><th>Départ</th><th>Arrivée</th><th>Durée</th><th>Réf</th></tr>
+            {% for v in data.voyages %}
+            <tr><td>{{ v.date }}</td><td>{{ v.depart }}</td><td>{{ v.arrivee }}</td><td>{{ v.duree }}</td><td>{{ v.ref }}</td></tr>
+            {% endfor %}
+          </table>
+        </section>
+      </div>
+
+      <div class="main-right">
+        <section>
+          <h2>Messagerie</h2>
+          <ul class="messages">
+            {% for m in data.messages %}
+            <li><strong>{{ m.auteur }}</strong><br><span>{{ m.texte }}</span></li>
+            {% endfor %}
+          </ul>
+        </section>
+
+        <section>
+          <h2>Documents</h2>
+          <ul class="docs">
+            {% for doc in data.documents %}
+            <li>📄 {{ doc }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
