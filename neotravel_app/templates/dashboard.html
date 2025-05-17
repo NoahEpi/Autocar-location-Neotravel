@@ -2,66 +2,86 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>autocar-location.com</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+  <header class="top-bar">
+  <div class="title">
+    <span class="logo-green">autocar</span><span class="logo-white">-location.com</span>
+  </div>
+  <a class="switch-btn" href="{{ url_for('autocariste') if data.role == 'client' else url_for('client') }}">
+    {{ 'Autocariste' if data.role == 'client' else 'Client' }}
+  </a>
+</header>
+
   <div class="container">
     <aside class="sidebar">
-      <h1><span class="highlight">autocar</span>-location.com</h1>
-      <ul class="menu">
-        <li class="active">Accueil</li>
-        <li>Devis</li>
-        <li>Voyages</li>
-        <li>Messagerie</li>
-        <li>Documents</li>
-        <li>Paramètres personnels</li>
-      </ul>
+  <ul class="menu">
+  <li class="active"><a href="#accueil"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
+  <li><a href="#trajets"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
+  <li><a href="#messagerie"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
+  <li><a href="#documents"><span class="icon">📁</span><span class="label">Documents</span></a></li>
+
+  {% if data.role == 'autocariste' %}
+    <li><a href="#statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>
+  {% endif %}
+
+  <li><a href="#parametres"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
+  </ul>
     </aside>
+
     <main class="dashboard">
-      <div class="main-left">
-        <section class="kpi">
-          <div class="kpi-box"><span>2</span> Devis en cours</div>
-          <div class="kpi-box"><span>3</span> Voyages confirmés</div>
-        </section>
+<div class="header">
+  {% if data.role == 'client' %}
+    <div class="kpi-box">
+      <span>{{ data.kpi.voyages }}</span>
+      <small>voyages confirmés</small>
+    </div>
+    <div class="kpi-box">
+      <span>{{ data.kpi.devis }}</span>
+      <small>devis en cours</small>
+    </div>
+  {% else %}
+    <div class="kpi-box"><span>{{ data.kpi.missions }}</span><small>missions en cours</small></div>
+    <div class="kpi-box"><span>{{ data.kpi.acceptation }}</span><small>taux d'acceptation</small></div>
+    <div class="kpi-box"><span>{{ data.kpi.realisees }}</span><small>missions réalisées</small></div>
+    <div class="kpi-box"><span>{{ data.kpi.revenus }}</span><small>revenus générés</small></div>
+  {% endif %}
+</div>
 
-        <section>
-          <h2>Devis</h2>
-          <table class="compact">
-            <tr><th>Date</th><th>Référence</th><th>Statut</th><th>Montant estimé</th></tr>
-            {% for d in data.devis %}
-            <tr><td>{{ d.date }}</td><td>{{ d.ref }}</td><td>{{ d.statut }}</td><td>{{ d.montant }}</td></tr>
-            {% endfor %}
-          </table>
-        </section>
+  <div class="central-wrapper">
+  <section class="content-box" id="trajets">
+    <h2>Trajets</h2>
+    <table>
+      <tr><th>Date<br>heure</th><th>Lieu de départ</th><th>Lieu d’arrivée</th><th>Statut</th></tr>
+      {% for t in data.trajets %}
+      <tr>
+        <td>{{ t.date }}<br>{{ t.heure }}</td>
+        <td>{{ t.depart }}</td>
+        <td>{{ t.arrivee }}</td>
+        <td><span class="status {{ t.statut|lower }}">{{ t.statut }}</span></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </section>
+</div>
 
-        <section>
-          <h2>Voyages</h2>
-          <table class="compact">
-            <tr><th>Date de départ</th><th>Départ</th><th>Arrivée</th><th>Durée</th><th>Réf</th></tr>
-            {% for v in data.voyages %}
-            <tr><td>{{ v.date }}</td><td>{{ v.depart }}</td><td>{{ v.arrivee }}</td><td>{{ v.duree }}</td><td>{{ v.ref }}</td></tr>
-            {% endfor %}
-          </table>
-        </section>
-      </div>
-
-      <div class="main-right">
-        <section>
-          <h2>Messagerie</h2>
-          <ul class="messages">
-            {% for m in data.messages %}
-            <li><strong>{{ m.auteur }}</strong><br><span>{{ m.texte }}</span></li>
+      <div class="flex-row">
+        <section class="content-box" id="documents">
+          <h2>Documents</h2>
+          <ul>
+            {% for doc in data.documents %}
+            <li>📄 {{ doc }}</li>
             {% endfor %}
           </ul>
         </section>
 
-        <section>
-          <h2>Documents</h2>
-          <ul class="docs">
-            {% for doc in data.documents %}
-            <li>📄 {{ doc }}</li>
+        <section class="content-box" id="messagerie">
+          <h2>Messagerie</h2>
+          <ul>
+            {% for m in data.messages %}
+            <li><strong>{{ m.auteur }}</strong><br><span>{{ m.texte }}</span></li>
             {% endfor %}
           </ul>
         </section>
