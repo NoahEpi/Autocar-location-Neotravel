@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Messagerie – Neotravel</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="top-bar">
+    <div class="title">
+      <span class="logo-green">autocar</span><span class="logo-white">-location.com</span>
+    </div>
+    <a class="switch-btn" href="{{ url_for('autocariste') if data.role == 'client' else url_for('client') }}">
+      {{ 'Autocariste' if data.role == 'client' else 'Client' }}
+    </a>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <ul class="menu">
+        <li><a href="/"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
+        {% if data.role == 'client' %}
+          <li><a href="#trajets"><span class="icon">🚌</span><span class="label">Voyages</span></a></li>
+          <li class="active"><a href="#messagerie"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
+          <li><a href="#documents"><span class="icon">📁</span><span class="label">Documents</span></a></li>
+          <li><a href="#parametres"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
+        {% else %}
+          <li><a href="#missions"><span class="icon">📄</span><span class="label">Missions</span></a></li>
+          <li class="active"><a href="#messagerie"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
+          <li><a href="#documents"><span class="icon">📁</span><span class="label">Documents</span></a></li>
+          <li><a href="#statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>
+          <li><a href="#parametres"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
+        {% endif %}
+      </ul>
+    </aside>
+
+    <main class="messagerie-main centered">
+      <section class="message-groups">
+        <h2>Conversations</h2>
+        <ul class="group-list">
+          {% for groupe in data.groupes %}
+        <li class="{% if loop.index0 == data.groupe_actif %}active{% endif %}">
+          <form method="get" action="{{ url_for('messagerie_autocariste') if data.role == 'autocariste' else url_for('messagerie') }}">
+            <input type="hidden" name="groupe" value="{{ loop.index0 }}">
+            <button type="submit" class="group-button">{{ groupe.nom }}</button>
+          </form>
+        </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section class="chat-panel">
+        <div class="chat-header">
+          <h3>🚍 Groupe Futuroscope</h3>
+          <span class="chat-status">En ligne</span>
+        </div>
+        <div class="chat-box">
+          {% for m in data.conversation %}
+          <div class="message 
+            {% if m.auteur == 'System' %}
+              system
+            {% elif m.auteur == data.nom_utilisateur %}
+              sent
+            {% else %}
+              received
+            {% endif %}
+          ">
+          <p><strong>{{ m.auteur }}</strong><br>{{ m.message }}</p>
+        </div>
+        {% endfor %}
+      </div>
+        <form class="chat-input">
+          <input type="text" placeholder="Écrire un message..." />
+          <button type="submit">Envoyer</button>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

@@ -216,7 +216,19 @@ th, td {
   color: #192734;
   font-weight: bold;
 }
-
+.group-button {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+}
+.group-button:hover {
+  color: #1d2d3c;
+}
 /* --------- Panneau de discussion --------- */
 .chat-panel {
   flex: 1;

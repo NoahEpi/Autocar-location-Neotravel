@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
@@ -39,30 +39,62 @@ def autocariste():
     return render_template('dashboard.html', data=data)
 @app.route('/messagerie')
 def messagerie():
+    groupes = [
+        {
+            "nom": "🚍 Groupe Futuroscope",
+            "messages": [
+                {"auteur": "Client", "message": "Bonjour, pouvez-vous confirmer l’heure de départ ?"},
+                {"auteur": "Autocariste", "message": "Oui, 9h00 au collège. Retour prévu vers 18h."},
+                {"auteur": "Client", "message": "Parfait, merci pour votre efficacité !"},
+                {"auteur": "System", "message": "📎 Feuille de route ajoutée."}
+            ]
+        },
+        {
+            "nom": "🎓 Lycée Voltaire",
+            "messages": [
+                {"auteur": "Client", "message": "Bonjour"},
+                {"auteur": "Autocariste", "message": "Bonjour, je vous écoute."}
+            ]
+        }
+    ]
+    index = int(request.args.get("groupe", 0))
     data = {
-        "role": "client",  # ou "autocariste" selon le contexte utilisateur
-        "conversation": [
-            {"auteur": "Client", "message": "Bonjour, pouvez-vous confirmer l'heure de départ du 5 juin ?"},
-            {"auteur": "Autocariste", "message": "Oui, départ prévu à 9h00 depuis Bordeaux comme indiqué dans la feuille de route."},
-            {"auteur": "Client", "message": "Merci ! On prévoit une arrivée vers midi ?"},
-            {"auteur": "Autocariste", "message": "Exactement, arrivée estimée à 11h50 au Futuroscope."},
-            {"auteur": "System", "message": "📎 Feuille de route.pdf ajoutée"}
-        ]
+        "role": "client",  
+        "nom_utilisateur": "Client",  # pour comparaison fiable
+        "groupes": groupes,
+        "groupe_actif": index,
+        "conversation": groupes[index]["messages"]
     }
-    return render_template('messagerie.html', data=data)
+    return render_template("messagerie.html", data=data)
 @app.route('/messagerie-autocariste')
 def messagerie_autocariste():
+    groupes = [
+        {
+            "nom": "🚍 Groupe Futuroscope",
+            "messages": [
+                {"auteur": "Client", "message": "Bonjour, pouvez-vous confirmer l’heure de départ ?"},
+                {"auteur": "Autocariste", "message": "Oui, 9h00 au collège. Retour prévu vers 18h."},
+                {"auteur": "Client", "message": "Parfait, merci pour votre efficacité !"},
+                {"auteur": "System", "message": "📎 Feuille de route ajoutée."}
+            ]
+        },
+        {
+            "nom": "🎓 Lycée Voltaire",
+            "messages": [
+                {"auteur": "Client", "message": "Bonjour"},
+                {"auteur": "Autocariste", "message": "Bonjour, je vous écoute."}
+            ]
+        }
+    ]
+    index = int(request.args.get("groupe", 0))
     data = {
         "role": "autocariste",
-        "conversation": [
-            {"auteur": "Client", "message": "Bonjour, pouvez-vous nous envoyer la feuille de route ?"},
-            {"auteur": "Autocariste", "message": "Oui, elle est disponible dans votre espace documents."},
-            {"auteur": "Client", "message": "Parfait, merci pour la réactivité."},
-            {"auteur": "Autocariste", "message": "Avec plaisir, départ confirmé pour 9h."},
-            {"auteur": "System", "message": "📎 Feuille de route.pdf ajoutée"}
-        ]
+        "nom_utilisateur": "Autocariste",
+        "groupes": groupes,
+        "groupe_actif": index,
+        "conversation": groupes[index]["messages"]
     }
-    return render_template('messagerie.html', data=data)
+    return render_template("messagerie.html", data=data)
 
 
 if __name__ == '__main__':
