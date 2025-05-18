@@ -21,11 +21,11 @@
   <ul class="menu">
   <li class="active"><a href="#accueil"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
   <li class="{% if request.path == '/trajets' %}active{% endif %}"><a href="{{ url_for('trajets') }}"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
-  <li class="active"><a href="{{ url_for('messagerie') if data.role == 'client' else url_for('messagerie_autocariste') }}"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
+  <li><a href="{{ url_for('messagerie') if data.role == 'client' else url_for('messagerie_autocariste') }}"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
   <li><a href="#documents"><span class="icon">📁</span><span class="label">Documents</span></a></li>
 
   {% if data.role == 'autocariste' %}
-    <li><a href="#statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>
+    <li><a href="/statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>
   {% endif %}
 
   <li><a href="#parametres"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>

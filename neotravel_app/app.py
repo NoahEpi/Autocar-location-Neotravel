@@ -105,6 +105,9 @@ def trajets():
         {"date": "15/07/25", "heure": "08:30", "depart": "Montpellier", "arrivee": "Avignon", "duree": "2h10", "statut": "En attente"}
     ]
     return render_template('trajets.html', trajets=trajets )
+@app.route('/statistiques')
+def statistiques():
+    return render_template('statistiques.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
