@@ -21,12 +21,12 @@
       <ul class="menu">
         <li><a href="/"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
         {% if data.role == 'client' %}
-          <li><a href="#trajets"><span class="icon">🚌</span><span class="label">Voyages</span></a></li>
+          <li class="{% if request.path == '/trajets' %}active{% endif %}"><a href="{{ url_for('trajets') }}"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
           <li class="active"><a href="#messagerie"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
           <li><a href="#documents"><span class="icon">📁</span><span class="label">Documents</span></a></li>
           <li><a href="#parametres"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
         {% else %}
-          <li><a href="#missions"><span class="icon">📄</span><span class="label">Missions</span></a></li>
+          <li class="{% if request.path == '/trajets' %}active{% endif %}"><a href="{{ url_for('trajets') }}"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
           <li class="active"><a href="#messagerie"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
           <li><a href="#documents"><span class="icon">📁</span><span class="label">Documents</span></a></li>
           <li><a href="#statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>

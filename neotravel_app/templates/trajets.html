@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Trajets – Neotravel</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap" rel="stylesheet">
+  <style>
+    .filter-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
+      background-color: #1d2d3c;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #c8f900;
+    }
+    .filter-form label {
+      color: #c8f900;
+      font-weight: bold;
+    }
+    .filter-form input[type="text"],
+    .filter-form input[type="date"] {
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      background: #2e3e4e;
+      color: white;
+    }
+    .filter-form button {
+      background: #c8f900;
+      color: #1d2d3c;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      padding: 10px 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="title">
+      <span class="logo-green">autocar</span><span class="logo-white">-location.com</span>
+    </div>
+    <a class="switch-btn" href="/autocariste">Autocariste</a>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <ul class="menu">
+        <li class="{% if request.path == '/' %}active{% endif %}"><a href="/"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
+        <li class="{% if request.path == '/trajets' %}active{% endif %}"><a href="{{ url_for('trajets') }}"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
+        <li class="{% if '/messagerie' in request.path %}active{% endif %}"><a href="/messagerie"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
+        <li><a href="#"><span class="icon">📁</span><span class="label">Documents</span></a></li>
+        <li><a href="#"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="dashboard">
+      <section class="content-box">
+        <h2>Liste des trajets</h2>
+
+        <form method="get" class="filter-form">
+          <label for="search">Recherche :</label>
+          <input type="text" id="search" name="search" placeholder="Départ, arrivée, statut..." value="{{ request.args.get('search', '') }}">
+
+          <label for="date">Filtrer par date :</label>
+          <input type="date" id="date" name="date" value="{{ request.args.get('date', '') }}">
+
+          <button type="submit">Filtrer</button>
+        </form>
+
+        <table>
+          <tr><th>Date<br>heure</th><th>Départ</th><th>Arrivée</th><th>Durée</th><th>Statut</th></tr>
+          {% set search = request.args.get('search', '').lower() %}
+          {% set date_filter = request.args.get('date', '') %}
+
+          {% for t in trajets %}
+            {% set match_search = (search in t.depart.lower()) or (search in t.arrivee.lower()) or (search in t.statut.lower()) if search else true %}
+            {% set match_date = (date_filter == t.date) if date_filter else true %}
+            {% if match_search and match_date %}
+            <tr>
+              <td>{{ t.date }}<br>{{ t.heure }}</td>
+              <td>{{ t.depart }}</td>
+              <td>{{ t.arrivee }}</td>
+              <td>{{ t.duree if t.duree is defined else '?' }}</td>
+              <td><span class="status {{ t.statut|lower }}">{{ t.statut }}</span></td>
+            </tr>
+            {% endif %}
+          {% endfor %}
+        </table>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

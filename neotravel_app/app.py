@@ -95,7 +95,16 @@ def messagerie_autocariste():
         "conversation": groupes[index]["messages"]
     }
     return render_template("messagerie.html", data=data)
-
+@app.route('/trajets')
+def trajets():
+    trajets = [
+        {"date": "23/05/25", "heure": "09:00", "depart": "Mérignac", "arrivee": "Lyon","duree": "6h45", "statut": "Confirmée"},
+        {"date": "01/06/26", "heure": "09:00", "depart": "Lyon", "arrivee": "Bordeaux","duree": "6h", "statut": "En attente"},
+        {"date": "05/06/25", "heure": "09:00", "depart": "Bordeaux", "arrivee": "Futuroscope","duree": "2h", "statut": "Annulée"},
+        {"date": "14/06/25", "heure": "07:45", "depart": "Toulouse", "arrivee": "Carcassonne", "duree": "1h45", "statut": "Confirmée"},
+        {"date": "15/07/25", "heure": "08:30", "depart": "Montpellier", "arrivee": "Avignon", "duree": "2h10", "statut": "En attente"}
+    ]
+    return render_template('trajets.html', trajets=trajets )
 
 if __name__ == '__main__':
     app.run(debug=True)
