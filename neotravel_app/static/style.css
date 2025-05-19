@@ -298,3 +298,11 @@ th, td {
   cursor: pointer;
   font-weight: bold;
 }
+.autocariste-link {
+  color: #c8f900;
+  text-decoration: none;
+  font-weight: bold;
+}
+.autocariste-link:hover {
+  text-decoration: underline;
+}

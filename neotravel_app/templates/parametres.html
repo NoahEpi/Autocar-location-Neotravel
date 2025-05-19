@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Paramètres – Neotravel</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap" rel="stylesheet">
+  <style>
+    .param-section {
+      background: #243444;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+      color: white;
+    }
+    .param-section h2 {
+      color: #c8f900;
+      margin-bottom: 15px;
+    }
+    .param-section label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .param-section input, .param-section select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+      background: #2e3e4e;
+      color: white;
+      margin-top: 5px;
+    }
+    .param-section button {
+      margin-top: 20px;
+      background: #c8f900;
+      color: #1d2d3c;
+      padding: 10px 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="title">
+      <span class="logo-green">autocar</span><span class="logo-white">-location.com</span>
+    </div>
+    <a class="switch-btn" href="/parametres?role={{ 'autocariste' if role == 'client' else 'client' }}">
+    {{ 'Autocariste' if role == 'client' else 'Client' }}
+    </a>
+  </header>
+
+  <div class="container">
+    <aside class="sidebar">
+      <ul class="menu">
+        <li><a href="/"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
+        <li><a href="/trajets"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
+        <li><a href="{{ url_for('messagerie') if role == 'client' else url_for('messagerie_autocariste') }}"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
+        <li><a href="#"><span class="icon">📁</span><span class="label">Documents</span></a></li>
+        <li><a href="/statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>
+        <li class="active"><a href="/parametres"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
+      </ul>
+    </aside>
+
+    <main class="dashboard">
+      <form class="param-section">
+        <h2>Informations utilisateur</h2>
+        <label for="nom">Nom</label>
+        <input type="text" id="nom" name="nom" value="{{ utilisateur.nom }}">
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="{{ utilisateur.email }}">
+
+        <label for="mdp">Mot de passe</label>
+        <input type="password" id="mdp" name="mdp">
+
+        <label for="langue">Langue</label>
+        <select id="langue" name="langue">
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+        </select>
+
+        <button type="submit">Enregistrer les modifications</button>
+      </form>
+
+      {% if role == 'autocariste' %}
+      <form class="param-section">
+        <h2>Paramètres entreprise (Autocariste)</h2>
+        <label for="societe">Nom de la société</label>
+        <input type="text" id="societe" name="societe" value="{{ entreprise.nom }}">
+
+        <label for="siret">Numéro SIRET</label>
+        <input type="text" id="siret" name="siret" value="{{ entreprise.siret }}">
+
+        <label for="telephone">Téléphone de contact</label>
+        <input type="tel" id="telephone" name="telephone" value="{{ entreprise.tel }}">
+
+        <label for="horaires">Horaires de disponibilité</label>
+        <input type="text" id="horaires" name="horaires" value="{{ entreprise.horaires }}">
+
+        <button type="submit">Enregistrer les paramètres entreprise</button>
+      </form>
+      {% else %}
+      <form class="param-section">
+        <h2>Préférences de communication (Client)</h2>
+        <label for="notif">Recevoir les notifications</label>
+        <select id="notif" name="notif">
+          <option value="oui">Oui</option>
+          <option value="non">Non</option>
+        </select>
+
+        <label for="type-contact">Méthode de contact préférée</label>
+        <select id="type-contact" name="type-contact">
+          <option value="email">Email</option>
+          <option value="sms">SMS</option>
+          <option value="tel">Téléphone</option>
+        </select>
+
+        <button type="submit">Enregistrer mes préférences</button>
+      </form>
+      {% endif %}
+    </main>
+  </div>
+</body>
+</html>

@@ -61,7 +61,9 @@
     <div class="title">
       <span class="logo-green">autocar</span><span class="logo-white">-location.com</span>
     </div>
-    <a class="switch-btn" href="/">Client</a>
+    <a class="switch-btn" href="/parametres?role={{ 'client' if role == 'autocariste' else 'autocariste' }}">
+      {{ 'Client' if role == 'autocariste' else 'Autocariste' }}
+    </a>
   </header>
 
   <div class="container">
@@ -69,10 +71,10 @@
       <ul class="menu">
         <li><a href="/"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
         <li><a href="/trajets"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
-        <li><a href="/messagerie"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
+        <li><a href="/messagerie-autocariste"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
         <li><a href="#"><span class="icon">📁</span><span class="label">Documents</span></a></li>
         <li class="active"><a href="/statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>
-        <li><a href="#"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
+        <li><a href="/parametres?role=autocariste"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
       </ul>
     </aside>
 

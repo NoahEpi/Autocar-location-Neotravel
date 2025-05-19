@@ -55,7 +55,7 @@
         <li class="{% if request.path == '/trajets' %}active{% endif %}"><a href="{{ url_for('trajets') }}"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
         <li class="{% if '/messagerie' in request.path %}active{% endif %}"><a href="/messagerie"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
         <li><a href="#"><span class="icon">📁</span><span class="label">Documents</span></a></li>
-        <li><a href="#"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
+        <li><a href="/parametres"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
       </ul>
     </aside>
 
@@ -74,7 +74,7 @@
         </form>
 
         <table>
-          <tr><th>Date<br>heure</th><th>Départ</th><th>Arrivée</th><th>Durée</th><th>Statut</th></tr>
+          <tr><th>Date<br>heure</th><th>Départ</th><th>Arrivée</th><th>Durée</th><th>Prix</th><th>Statut</th><th>Autocariste</th></tr>
           {% set search = request.args.get('search', '').lower() %}
           {% set date_filter = request.args.get('date', '') %}
 
@@ -87,7 +87,11 @@
               <td>{{ t.depart }}</td>
               <td>{{ t.arrivee }}</td>
               <td>{{ t.duree if t.duree is defined else '?' }}</td>
+              <td>{{ t.prix }} €</td>
               <td><span class="status {{ t.statut|lower }}">{{ t.statut }}</span></td>
+              <td>
+                <a href="/messagerie?groupe=0" class="autocariste-link">{{ t.autocariste }}</a>
+              </td>
             </tr>
             {% endif %}
           {% endfor %}

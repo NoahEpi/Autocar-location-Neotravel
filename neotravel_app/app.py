@@ -98,16 +98,43 @@ def messagerie_autocariste():
 @app.route('/trajets')
 def trajets():
     trajets = [
-        {"date": "23/05/25", "heure": "09:00", "depart": "Mérignac", "arrivee": "Lyon","duree": "6h45", "statut": "Confirmée"},
-        {"date": "01/06/26", "heure": "09:00", "depart": "Lyon", "arrivee": "Bordeaux","duree": "6h", "statut": "En attente"},
-        {"date": "05/06/25", "heure": "09:00", "depart": "Bordeaux", "arrivee": "Futuroscope","duree": "2h", "statut": "Annulée"},
-        {"date": "14/06/25", "heure": "07:45", "depart": "Toulouse", "arrivee": "Carcassonne", "duree": "1h45", "statut": "Confirmée"},
-        {"date": "15/07/25", "heure": "08:30", "depart": "Montpellier", "arrivee": "Avignon", "duree": "2h10", "statut": "En attente"}
+        {"date": "23/05/25", "heure": "09:00", "depart": "Mérignac", "arrivee": "Lyon","duree": "6h45", "statut": "Confirmée","prix": 580,"autocariste": "Autocar Sud"},
+        {"date": "01/06/26", "heure": "09:00", "depart": "Lyon", "arrivee": "Bordeaux","duree": "6h", "statut": "En attente","prix": 620,"autocariste": ""},
+        {"date": "05/06/25", "heure": "09:00", "depart": "Bordeaux", "arrivee": "Futuroscope","duree": "2h", "statut": "Annulée","prix": 180,"autocariste": ""},
+        {"date": "14/06/25", "heure": "07:45", "depart": "Toulouse", "arrivee": "Carcassonne", "duree": "1h45", "statut": "Confirmée","prix": 120,"autocariste": ""},
+        {"date": "15/07/25", "heure": "08:30", "depart": "Montpellier", "arrivee": "Avignon", "duree": "2h10", "statut": "En attente","prix": 140,"autocariste": ""}
     ]
     return render_template('trajets.html', trajets=trajets )
 @app.route('/statistiques')
 def statistiques():
-    return render_template('statistiques.html')
+    role = 'autocariste' 
+    return render_template('statistiques.html',role=role)
+@app.route('/parametres')
+def parametres():
+    role = request.args.get("role", "client")  # par défaut client
+    utilisateur = {
+        "nom": "Jean Dupont",
+        "email": "jean.dupont@email.com"
+    }
 
+    if role == "autocariste":
+        entreprise = {
+            "nom": "Autocar Sud",
+            "siret": "123 456 789 00017",
+            "tel": "05 55 55 55 55",
+            "horaires": "Lun–Ven : 08h00–18h00"
+        }
+        return render_template(
+            "parametres.html",
+            role=role,
+            utilisateur=utilisateur,
+            entreprise=entreprise
+        )
+    else:
+        return render_template(
+            "parametres.html",
+            role=role,
+            utilisateur=utilisateur
+        )
 if __name__ == '__main__':
     app.run(debug=True)
