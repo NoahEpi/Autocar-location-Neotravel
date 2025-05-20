@@ -23,13 +23,13 @@
           <li><a href="/"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>  
           <li class="{% if request.path == '/trajets' %}active{% endif %}"><a href="{{ url_for('trajets') }}"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
           <li class="active"><a href="#messagerie"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
-          <li><a href="#documents"><span class="icon">📁</span><span class="label">Documents</span></a></li>
+          <li class="{% if '/documents' in request.path %}active{% endif %}"><a href="/documents?role={{ data.role if data is defined else role }}"><span class="icon">📁</span><span class="label">Documents</span></a></li>
           <li><a href="/parametres?role=client"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
         {% else %}
           <li><a href="/autocariste"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
           <li class="{% if request.path == '/trajets' %}active{% endif %}"><a href="{{ url_for('trajets') }}"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
           <li class="active"><a href="#messagerie-autocariste"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
-          <li><a href="#documents"><span class="icon">📁</span><span class="label">Documents</span></a></li>
+          <li class="{% if '/documents' in request.path %}active{% endif %}"><a href="/documents?role={{ data.role if data is defined else role }}"><span class="icon">📁</span><span class="label">Documents</span></a></li>
           <li><a href="/statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>
           <li><a href="/parametres?role=autocariste"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
         {% endif %}

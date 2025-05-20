@@ -1,3 +1,4 @@
+import os
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -111,7 +112,8 @@ def statistiques():
     return render_template('statistiques.html',role=role)
 @app.route('/parametres')
 def parametres():
-    role = request.args.get("role", "client")  # par défaut client
+    role = request.args.get("role", "client")
+
     utilisateur = {
         "nom": "Jean Dupont",
         "email": "jean.dupont@email.com"
@@ -122,6 +124,7 @@ def parametres():
             "nom": "Autocar Sud",
             "siret": "123 456 789 00017",
             "tel": "05 55 55 55 55",
+            "iban": "FR76 3000 6000 0112 3456 7890 189",
             "horaires": "Lun–Ven : 08h00–18h00"
         }
         return render_template(
@@ -131,10 +134,48 @@ def parametres():
             entreprise=entreprise
         )
     else:
+        paiement = {
+            "type": "cb",
+            "numero": "•••• •••• •••• 1234",
+            "expiration": "2026-08"
+        }
         return render_template(
             "parametres.html",
             role=role,
-            utilisateur=utilisateur
+            utilisateur=utilisateur,
+            paiement=paiement
         )
+@app.route('/documents')
+def documents():
+    role = request.args.get("role", "client")
+    folder = f"static/documents/{role}"
+
+    categories = {
+        "devis": [],
+        "factures": [],
+        "feuilles_de_route": [],
+        "conditions": []
+    }
+
+    try:
+        fichiers = [
+            f for f in os.listdir(folder)
+            if os.path.isfile(os.path.join(folder, f))
+        ]
+    except FileNotFoundError:
+        fichiers = []
+
+    for fichier in fichiers:
+        nom = fichier.lower()
+        if "devis" in nom:
+            categories["devis"].append(fichier)
+        elif "facture" in nom:
+            categories["factures"].append(fichier)
+        elif "feuille" in nom or "route" in nom:
+            categories["feuilles_de_route"].append(fichier)
+        elif "condition" in nom or "mission" in nom:
+            categories["conditions"].append(fichier)
+
+    return render_template("documents.html", role=role, fichiers=categories)
 if __name__ == '__main__':
     app.run(debug=True)

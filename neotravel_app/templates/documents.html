@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Documents – Neotravel</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap" rel="stylesheet">
+  <style>
+    .documents-section {
+      background: #243444;
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      margin: 30px 20px;
+    }
+    .documents-section h2 {
+      color: #c8f900;
+      margin-bottom: 20px;
+    }
+    .documents-section ul {
+      list-style: none;
+      padding: 0;
+    }
+    .documents-section li {
+      padding: 10px;
+      border-bottom: 1px solid #444;
+    }
+    .documents-section li a {
+      color: #c8f900;
+      text-decoration: none;
+    }
+    .documents-section li a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+<header class="top-bar">
+  <div class="title">
+    <span class="logo-green">autocar</span><span class="logo-white">-location.com</span>
+  </div>
+  <a class="switch-btn" href="{{ url_for('autocariste') if role == 'client' else url_for('client') }}">
+    {{ 'Autocariste' if role == 'client' else 'Client' }}
+  </a>
+</header>
+
+<div class="container">
+  <aside class="sidebar">
+    <ul class="menu">
+      <li><a href="/"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
+      <li><a href="/trajets"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
+      <li><a href="{{ url_for('messagerie') if role == 'client' else url_for('messagerie_autocariste') }}"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
+      <li class="active"><a href="/documents?role={{ role }}"><span class="icon">📁</span><span class="label">Documents</span></a></li>
+      <li><a href="/statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>
+      <li><a href="/parametres?role={{ role }}"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
+    </ul>
+  </aside>
+
+  <main class="dashboard">
+    <section class="documents-section">
+      <h2>Devis</h2>
+      <ul>
+        {% for f in fichiers.devis %}
+          <li><a href="/static/documents/{{ role }}/{{ f }}">📄 {{ f }}</a></li>
+        {% else %}
+          <li>Aucun devis disponible</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="documents-section">
+      <h2>Factures</h2>
+      <ul>
+        {% for f in fichiers.factures %}
+          <li><a href="/static/documents/{{ role }}/{{ f }}">📄 {{ f }}</a></li>
+        {% else %}
+          <li>Aucune facture disponible</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="documents-section">
+      <h2>Feuilles de route</h2>
+      <ul>
+        {% for f in fichiers.feuilles_de_route %}
+          <li><a href="/static/documents/{{ role }}/{{ f }}">📄 {{ f }}</a></li>
+        {% else %}
+          <li>Aucune feuille de route disponible</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="documents-section">
+      <h2>Conditions spécifiques de missions</h2>
+      <ul>
+        {% for f in fichiers.conditions %}
+          <li><a href="/static/documents/{{ role }}/{{ f }}">📄 {{ f }}</a></li>
+        {% else %}
+          <li>Aucune condition spécifique disponible</li>
+        {% endfor %}
+      </ul>
+    </section>
+  </main>
+</div>
+</body>
+</html>

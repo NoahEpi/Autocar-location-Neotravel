@@ -48,8 +48,8 @@
     <div class="title">
       <span class="logo-green">autocar</span><span class="logo-white">-location.com</span>
     </div>
-    <a class="switch-btn" href="/parametres?role={{ 'autocariste' if role == 'client' else 'client' }}">
-    {{ 'Autocariste' if role == 'client' else 'Client' }}
+    <a class="switch-btn" href="{{ url_for('autocariste') if role == 'client' else url_for('client') }}">
+      {{ 'Autocariste' if role == 'client' else 'Client' }}
     </a>
   </header>
 
@@ -59,9 +59,9 @@
         <li><a href="/"><span class="icon">🏠</span><span class="label">Accueil</span></a></li>
         <li><a href="/trajets"><span class="icon">🚌</span><span class="label">Trajets</span></a></li>
         <li><a href="{{ url_for('messagerie') if role == 'client' else url_for('messagerie_autocariste') }}"><span class="icon">💬</span><span class="label">Messagerie</span></a></li>
-        <li><a href="#"><span class="icon">📁</span><span class="label">Documents</span></a></li>
+        <li class="{% if '/documents' in request.path %}active{% endif %}"><a href="/documents?role={{ data.role if data is defined else role }}"><span class="icon">📁</span><span class="label">Documents</span></a></li>
         <li><a href="/statistiques"><span class="icon">📊</span><span class="label">Statistiques</span></a></li>
-        <li class="active"><a href="/parametres"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
+        <li class="active"><a href="/parametres?role={{ role }}"><span class="icon">⚙️</span><span class="label">Paramètres</span></a></li>
       </ul>
     </aside>
 
@@ -97,6 +97,9 @@
 
         <label for="telephone">Téléphone de contact</label>
         <input type="tel" id="telephone" name="telephone" value="{{ entreprise.tel }}">
+        
+        <label for="iban">IBAN</label>
+        <input type="text" id="iban" name="iban" value="{{ entreprise.iban }}">
 
         <label for="horaires">Horaires de disponibilité</label>
         <input type="text" id="horaires" name="horaires" value="{{ entreprise.horaires }}">
@@ -120,6 +123,21 @@
         </select>
 
         <button type="submit">Enregistrer mes préférences</button>
+      </form>
+
+      <form class="param-section">
+        <h2>Moyen de paiement</h2>
+        <label for="type">Type de paiement</label>
+        <select id="type" name="type">
+          <option value="cb" {% if paiement.type == 'cb' %}selected{% endif %}>Carte bancaire</option>
+          <option value="virement" {% if paiement.type == 'virement' %}selected{% endif %}>Virement</option>
+          <option value="paypal" {% if paiement.type == 'paypal' %}selected{% endif %}>Paypal</option>
+        </select>
+
+        <input type="text" id="numero" name="numero" value="{{ paiement.numero }}">
+        <input type="month" id="expiration" name="expiration" value="{{ paiement.expiration }}">
+
+        <button type="submit">Mettre à jour le moyen de paiement</button>
       </form>
       {% endif %}
     </main>
