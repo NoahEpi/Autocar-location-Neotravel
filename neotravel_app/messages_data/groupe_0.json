@@ -1,0 +1,22 @@
+[
+  {
+    "auteur": "Client",
+    "message": "Bonjour, pouvez-vous confirmer l’heure de départ ?"
+  },
+  {
+    "auteur": "Autocariste",
+    "message": "Oui, 9h00 au collège. Retour prévu vers 18h."
+  },
+  {
+    "auteur": "Client",
+    "message": "Parfait, merci pour votre efficacité !"
+  },
+  {
+    "auteur": "System",
+    "message": "📎 Feuille de route ajoutée."
+  },
+  {
+    "auteur": "Autocariste",
+    "message": "Je suis là dans 10 min, tout est prêt de votre côté ?"
+  }
+]

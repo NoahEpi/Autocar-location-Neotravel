@@ -1,7 +1,27 @@
 import os
-from flask import Flask, render_template, request
+import json
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
+# Dossier de stockage des messages
+MESSAGE_DIR = "messages_data"
+os.makedirs(MESSAGE_DIR, exist_ok=True)
+
+
+def charger_messages(groupe):
+    chemin = os.path.join(MESSAGE_DIR, f"groupe_{groupe}.json")
+    if os.path.exists(chemin):
+        with open(chemin, "r", encoding="utf-8") as f:
+            return json.load(f)
+    return []
+
+def sauvegarder_message(groupe, auteur, message):
+    chemin = os.path.join(MESSAGE_DIR, f"groupe_{groupe}.json")
+    messages = charger_messages(groupe)
+    messages.append({"auteur": auteur, "message": message})
+    with open(chemin, "w", encoding="utf-8") as f:
+        json.dump(messages, f, ensure_ascii=False, indent=2)
+
 
 @app.route('/')
 def client():
@@ -40,62 +60,46 @@ def autocariste():
     return render_template('dashboard.html', data=data)
 @app.route('/messagerie')
 def messagerie():
-    groupes = [
-        {
-            "nom": "🚍 Groupe Futuroscope",
-            "messages": [
-                {"auteur": "Client", "message": "Bonjour, pouvez-vous confirmer l’heure de départ ?"},
-                {"auteur": "Autocariste", "message": "Oui, 9h00 au collège. Retour prévu vers 18h."},
-                {"auteur": "Client", "message": "Parfait, merci pour votre efficacité !"},
-                {"auteur": "System", "message": "📎 Feuille de route ajoutée."}
-            ]
-        },
-        {
-            "nom": "🎓 Lycée Voltaire",
-            "messages": [
-                {"auteur": "Client", "message": "Bonjour"},
-                {"auteur": "Autocariste", "message": "Bonjour, je vous écoute."}
-            ]
-        }
-    ]
     index = int(request.args.get("groupe", 0))
+    messages = charger_messages(index)
+    groupes = [
+        {"nom": "🚍 Groupe Futuroscope"},
+        {"nom": "🎓 Lycée Voltaire"}
+    ]
     data = {
-        "role": "client",  
-        "nom_utilisateur": "Client",  # pour comparaison fiable
+        "role": "client",
+        "nom_utilisateur": "Client",
         "groupes": groupes,
         "groupe_actif": index,
-        "conversation": groupes[index]["messages"]
+        "conversation": messages
     }
     return render_template("messagerie.html", data=data)
 @app.route('/messagerie-autocariste')
 def messagerie_autocariste():
-    groupes = [
-        {
-            "nom": "🚍 Groupe Futuroscope",
-            "messages": [
-                {"auteur": "Client", "message": "Bonjour, pouvez-vous confirmer l’heure de départ ?"},
-                {"auteur": "Autocariste", "message": "Oui, 9h00 au collège. Retour prévu vers 18h."},
-                {"auteur": "Client", "message": "Parfait, merci pour votre efficacité !"},
-                {"auteur": "System", "message": "📎 Feuille de route ajoutée."}
-            ]
-        },
-        {
-            "nom": "🎓 Lycée Voltaire",
-            "messages": [
-                {"auteur": "Client", "message": "Bonjour"},
-                {"auteur": "Autocariste", "message": "Bonjour, je vous écoute."}
-            ]
-        }
-    ]
     index = int(request.args.get("groupe", 0))
+    messages = charger_messages(index)
+    groupes = [
+        {"nom": "🚍 Groupe Futuroscope"},
+        {"nom": "🎓 Lycée Voltaire"}
+    ]
     data = {
         "role": "autocariste",
         "nom_utilisateur": "Autocariste",
         "groupes": groupes,
         "groupe_actif": index,
-        "conversation": groupes[index]["messages"]
+        "conversation": messages
     }
     return render_template("messagerie.html", data=data)
+@app.route("/envoyer-message", methods=["POST"])
+def envoyer_message():
+    role = request.form["role"]
+    auteur = request.form["auteur"]
+    groupe = request.form["groupe"]
+    message = request.form["message"]
+
+    sauvegarder_message(groupe, auteur, message)
+
+    return redirect(url_for("messagerie_autocariste" if role == "autocariste" else "messagerie", groupe=groupe))
 @app.route('/trajets')
 def trajets():
     trajets = [

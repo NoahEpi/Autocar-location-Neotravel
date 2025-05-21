@@ -71,10 +71,13 @@
         </div>
         {% endfor %}
       </div>
-        <form class="chat-input">
-          <input type="text" placeholder="Écrire un message..." />
-          <button type="submit">Envoyer</button>
-        </form>
+      <form class="chat-input" method="POST" action="/envoyer-message">
+        <input type="hidden" name="role" value="{{ data.role }}">
+        <input type="hidden" name="auteur" value="{{ data.nom_utilisateur }}">
+        <input type="hidden" name="groupe" value="{{ data.groupe_actif }}">
+        <input type="text" name="message" placeholder="Écrire un message..." required />
+        <button type="submit">Envoyer</button>
+      </form>
       </section>
     </main>
   </div>
