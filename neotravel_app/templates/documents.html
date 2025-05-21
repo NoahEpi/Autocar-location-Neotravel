@@ -65,6 +65,9 @@
         {% else %}
           <li>Aucun devis disponible</li>
         {% endfor %}
+      <div class="drop-zone" ondrop="handleDrop(event, 'devis')" ondragover="allowDrop(event)">
+        Glissez ici vos fichiers à ajouter à la section devis.
+      </div>
       </ul>
     </section>
 
@@ -76,6 +79,9 @@
         {% else %}
           <li>Aucune facture disponible</li>
         {% endfor %}
+      <div class="drop-zone" ondrop="handleDrop(event, 'factures')" ondragover="allowDrop(event)">
+        Glissez ici vos fichiers à ajouter à la section factures.
+      </div>
       </ul>
     </section>
 
@@ -87,6 +93,9 @@
         {% else %}
           <li>Aucune feuille de route disponible</li>
         {% endfor %}
+        <div class="drop-zone" ondrop="handleDrop(event, 'feuilles_de_route')" ondragover="allowDrop(event)">
+          Glissez ici vos fichiers à ajouter à la section feuille de route.
+        </div>
       </ul>
     </section>
 
@@ -98,9 +107,42 @@
         {% else %}
           <li>Aucune condition spécifique disponible</li>
         {% endfor %}
+      <div class="drop-zone" ondrop="handleDrop(event, 'condition')" ondragover="allowDrop(event)">
+        Glissez ici vos fichiers à ajouter à la section conditions spécifiques de missions.
+      </div>
       </ul>
     </section>
   </main>
 </div>
+<script>
+function allowDrop(event) {
+  event.preventDefault();
+}
+
+function handleDrop(event, type) {
+  event.preventDefault();
+  const files = event.dataTransfer.files;
+  const formData = new FormData();
+
+  for (const file of files) {
+    formData.append("file", file);
+    formData.append("type", type);
+    formData.append("role", "{{ role }}");
+  }
+
+  fetch("/upload", {
+    method: "POST",
+    body: formData
+  })
+  .then(response => {
+    if (response.ok) {
+      alert("Fichier déposé avec succès !");
+      location.reload();
+    } else {
+      alert("Erreur lors du dépôt.");
+    }
+  });
+}
+</script>
 </body>
 </html>

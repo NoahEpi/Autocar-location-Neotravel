@@ -175,7 +175,23 @@ def documents():
             categories["feuilles_de_route"].append(fichier)
         elif "condition" in nom or "mission" in nom:
             categories["conditions"].append(fichier)
-
     return render_template("documents.html", role=role, fichiers=categories)
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    role = request.form.get("role", "client")
+    file = request.files.get("file")
+    type_doc = request.form.get("type", "autres")
+
+    # Dossier de destination
+    path = f"static/documents/{role}"
+    os.makedirs(path, exist_ok=True)
+
+    # Enregistrement du fichier
+    if file:
+        filepath = os.path.join(path, file.filename)
+        file.save(filepath)
+        return "Upload réussi", 200
+    return "Aucun fichier reçu", 400
+
 if __name__ == '__main__':
     app.run(debug=True)
