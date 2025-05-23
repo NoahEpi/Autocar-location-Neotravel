@@ -132,8 +132,8 @@
         <label for="type">Type de paiement</label>
         <select id="type" name="type">
           <option value="cb" {% if paiement.type == 'cb' %}selected{% endif %}>Carte bancaire</option>
-          <option value="virement" {% if paiement.type == 'virement' %}selected{% endif %}>Virement</option>
-          <option value="paypal" {% if paiement.type == 'paypal' %}selected{% endif %}>Paypal</option>
+          <option value="virement" {% if paiement.type == 'GooglePay' %}selected{% endif %}>GooglePay</option>
+          <option value="paypal" {% if paiement.type == 'ApplePay' %}selected{% endif %}>ApplePay</option>
         </select>
 
         <input type="text" id="numero" name="numero" value="{{ paiement.numero }}">
